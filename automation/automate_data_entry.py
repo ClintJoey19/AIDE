@@ -1,0 +1,4 @@
+
+
+def automate():
+    print("Automating")
