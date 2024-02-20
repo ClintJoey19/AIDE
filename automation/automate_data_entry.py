@@ -1,4 +1,10 @@
+import pyautogui
+import time
 
+def automate(codes):
+    time.sleep(5)
 
-def automate():
-    print("Automating")
+    # automated data entry
+    for code in codes:
+        pyautogui.typewrite(code, 0)
+        pyautogui.press('enter')
