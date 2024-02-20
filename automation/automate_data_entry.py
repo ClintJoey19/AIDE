@@ -2,7 +2,12 @@ import pyautogui
 import time
 
 def automate(codes):
-    time.sleep(5)
+    time.sleep(3)
+
+    # find the app icon
+    img = "./assets/notepad.png"
+    icon_loc = pyautogui.locateOnScreen(img)
+    pyautogui.click(icon_loc, interval=2)
 
     # automated data entry
     for code in codes:
