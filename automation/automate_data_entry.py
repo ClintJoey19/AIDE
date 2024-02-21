@@ -2,10 +2,7 @@ import pyautogui
 import time
 
 def automate(codes):
-    time.sleep(3)
-
-    # process here not done
-
+    time.sleep(2)
 
     # find the app icon
     img = "./assets/note.png"
