@@ -4,8 +4,11 @@ import time
 def automate(codes):
     time.sleep(3)
 
+    # process here not done
+
+
     # find the app icon
-    img = "./assets/notepad.png"
+    img = "./assets/note.png"
     icon_loc = pyautogui.locateOnScreen(img)
     pyautogui.click(icon_loc, interval=2)
 
