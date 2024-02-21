@@ -6,24 +6,10 @@ from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import (
     QApplication,
     QCheckBox,
-    QComboBox,
-    QDateEdit,
-    QDateTimeEdit,
-    QDial,
-    QDoubleSpinBox,
-    QFontComboBox,
     QLabel,
-    QLCDNumber,
-    QLineEdit,
     QMainWindow,
-    QProgressBar,
     QPushButton,
-    QRadioButton,
-    QSlider,
-    QSpinBox,
-    QTimeEdit,
     QVBoxLayout,
-    QHBoxLayout,
     QWidget,
 )
 
@@ -69,10 +55,14 @@ class Main(QMainWindow):
         if (self.data_entry_cb.isChecked()):
             print("Checked")
             pdf = "./pdf_folder/try.pdf"
-            codes = get_order_code(pdf)
+            codes = self.run_extract(pdf)
             automate(codes)
         else:
             print("Not Checked")
+
+    def run_extract(self, pdf):
+        code = get_order_code(pdf)
+        return code
 
 def set_Ui():
     app = QApplication(sys.argv)
