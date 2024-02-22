@@ -1,7 +1,8 @@
 from pdf_reader.extractor import get_order_code, get_file_name
 from automation.automate_data_entry import automate
+from utilities.utils import ProcessController
 import sys
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import QSize, Qt, QTimer
 from PyQt6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -96,9 +97,20 @@ class Main(QMainWindow):
 
         if pdf and pdf != "":
             if self.data_entry_cb.isChecked():
+                # set a popup indicating that the automation will start after 3s
+                is_finished = False
+
+                # todo: show a popup that will indicate that the automation is now in progress
+                # progress_box = QMessageBox(self)
+                # progress_box.setWindowTitle("Automating Invoice Data Entry")
+                # progress_box.setText("Processing")
+                # progress_box.setStandardButtons(QMessageBox.StandardButton.NoButton)
+                # progress_box.show()
+
                 codes = self.run_extract(pdf)
                 automate(codes)
                 QMessageBox.information(self, "Title", "Data Entry done")
+
             else:
                 QMessageBox.critical(self, "Error", "Automation type not set")
         else:
@@ -107,7 +119,10 @@ class Main(QMainWindow):
         self.action_btn.setEnabled(True)
 
     def open_invoice_pdf(self):
-        file_name, _ = QFileDialog.getOpenFileName(self, "Select PDF File", "", "PDF Files (*.pdf)")
+        file_name, _ = QFileDialog.getOpenFileName(self,
+                                                   "Select PDF File",
+                                                   "",
+                                                   "PDF Files (*.pdf)")
 
         if file_name:
             self.pdf_path = file_name
@@ -121,11 +136,20 @@ class Main(QMainWindow):
         return code
 
     def remove_pdf(self):
-        self.pdf_path = None
-        if not self.pdf_path or self.pdf_path is None:
-            self.pdf_icon_label.setVisible(False)
-            self.selected_file.setVisible(False)
-            self.setFixedSize(QSize(300, 200))
+        msg_box = QMessageBox(self)
+        msg_box.setWindowTitle("Remove Invoice")
+        msg_box.setText("Are you sure you want to remove the invoice?")
+        msg_box.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        msg_box.setDefaultButton(QMessageBox.StandardButton.No)
+
+        reply = msg_box.exec()
+
+        if reply == QMessageBox.StandardButton.Yes:
+            self.pdf_path = None
+            if not self.pdf_path or self.pdf_path is None:
+                self.pdf_icon_label.setVisible(False)
+                self.selected_file.setVisible(False)
+                self.setFixedSize(QSize(300, 200))
 
 def main():
     app = QApplication(sys.argv)
