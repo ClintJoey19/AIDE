@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QFileDialog
 )
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QIcon
 
 class Main(QMainWindow):
     def __init__(self):
@@ -42,11 +42,20 @@ class Main(QMainWindow):
         box.addWidget(invoice_input)
 
         # pdf icon
-        self.pdf_icon_label = QLabel(self)
-        self.pdf_icon_label.setBaseSize(QSize(40, 60))
-        pdf_icon = QPixmap("./assets/pdf.png")
-        self.pdf_icon_label.setPixmap(pdf_icon)
+        # self.pdf_icon_label = QLabel(self)
+        # self.pdf_icon_label.setBaseSize(QSize(40, 60))
+        # pdf_icon = QPixmap("./assets/pdf.png")
+        # self.pdf_icon_label.setPixmap(pdf_icon)
+        # self.pdf_icon_label.setVisible(False)
+        # self.pdf_icon_label.clicked.connect(self.remove_pdf)
+        # box.addWidget(self.pdf_icon_label)
+
+        self.pdf_icon_label = QPushButton(self)
+        self.pdf_icon_label.setIcon(QIcon("./assets/pdf.png"))
+        self.pdf_icon_label.setIconSize(QSize(40, 60))
+        self.pdf_icon_label.setFixedSize(QSize(40, 50))
         self.pdf_icon_label.setVisible(False)
+        self.pdf_icon_label.clicked.connect(self.remove_pdf)
         box.addWidget(self.pdf_icon_label)
 
         # selected file
@@ -108,13 +117,20 @@ class Main(QMainWindow):
         if file_name:
             self.pdf_path = file_name
             self.selected_file.setText(get_file_name(self.pdf_path))
-            self.setFixedSize(QSize(300, 250))
+            self.setFixedSize(QSize(300, 270))
             self.pdf_icon_label.setVisible(True)
             self.selected_file.setVisible(True)
 
     def run_extract(self, pdf):
         code = get_order_code(pdf)
         return code
+
+    def remove_pdf(self):
+        self.pdf_path = None
+        if not self.pdf_path or self.pdf_path is None:
+            self.pdf_icon_label.setVisible(False)
+            self.selected_file.setVisible(False)
+            self.setFixedSize(QSize(300, 200))
 
 def main():
     app = QApplication(sys.argv)
