@@ -10,7 +10,8 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QWidget,
-    QFileDialog
+    QFileDialog,
+    QMessageBox
 )
 from PyQt6.QtGui import QPixmap, QIcon
 
@@ -42,14 +43,6 @@ class Main(QMainWindow):
         box.addWidget(invoice_input)
 
         # pdf icon
-        # self.pdf_icon_label = QLabel(self)
-        # self.pdf_icon_label.setBaseSize(QSize(40, 60))
-        # pdf_icon = QPixmap("./assets/pdf.png")
-        # self.pdf_icon_label.setPixmap(pdf_icon)
-        # self.pdf_icon_label.setVisible(False)
-        # self.pdf_icon_label.clicked.connect(self.remove_pdf)
-        # box.addWidget(self.pdf_icon_label)
-
         self.pdf_icon_label = QPushButton(self)
         self.pdf_icon_label.setIcon(QIcon("./assets/pdf.png"))
         self.pdf_icon_label.setIconSize(QSize(40, 60))
@@ -98,16 +91,18 @@ class Main(QMainWindow):
         self.setCentralWidget(widget)
 
     def run(self):
-        if (self.data_entry_cb.isChecked()):
-            self.action_btn.setEnabled(False)
-            pdf = self.pdf_path
-            if pdf and pdf != "":
+        self.action_btn.setEnabled(False)
+        pdf = self.pdf_path
+
+        if pdf and pdf != "":
+            if self.data_entry_cb.isChecked():
                 codes = self.run_extract(pdf)
                 automate(codes)
+                QMessageBox.information(self, "Title", "Data Entry done")
             else:
-                print("No invoice found")
+                QMessageBox.critical(self, "Error", "Automation type not set")
         else:
-            print("Automation type not set")
+            QMessageBox.critical(self, "Error", "No Invoice Found")
 
         self.action_btn.setEnabled(True)
 
